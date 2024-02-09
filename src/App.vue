@@ -47,20 +47,31 @@ export default {
 
 <template>
     <header>
-        <SearchForm @form-submit="searchProductions" @term-change="setTitleFilter" buttonLabel="Cerca"
-            placeHolder="Cosa vorresti vedere?" />
+        <div class="container">
+            <SearchForm @form-submit="searchProductions" @term-change="setTitleFilter" buttonLabel="Cerca"
+                placeHolder="Cosa vorresti vedere?" />
+        </div>
     </header>
 
     <main>
-        <section>
-            <h2>Movies</h2>
-            <ProductionCard v-for="movie in store.movies" :key="movie.id" v-bind="movie" />
-        </section>
-        <section>
-            <h2>Series</h2>
-            <ProductionCard v-for="series in store.series" :key="series.id" v-bind="series" />
-        </section>
+        <div class="container">
+            <section>
+                <h2 v-show="store.movies.length > 0">MOVIES</h2>
+                <div class="row">
+                    <ProductionCard v-for="movie in store.movies" :key="movie.id" v-bind="movie" />
+                </div>
+            </section>
+
+            <section>
+                <h2 v-show="store.series.length > 0">SERIES</h2>
+                <div class="row">
+                    <ProductionCard v-for="series in store.series" :key="series.id" v-bind="series" />
+                </div>
+            </section>
+        </div>
     </main>
 </template>
 
-<style scoped></style>
+<style lang="scss">
+@use "./scss/style.scss";
+</style>

@@ -1,0 +1,45 @@
+header {
+    height: 80px;
+    background-color: black;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0%;
+    left: 0%;
+    z-index: 1;
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    h1 {
+        color: red;
+    }
+}
+
+main {
+    background-color: gray;
+    min-height: calc(100vh - 80px);
+
+    h2 {
+        color: white;
+        text-align: center;
+        padding: 2rem;
+        font-size: 3rem;
+    }
+
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 -10px;
+    }
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
