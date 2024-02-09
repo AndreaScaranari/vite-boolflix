@@ -1,28 +1,41 @@
 <script>
+import { pics } from "../data/index"
 export default {
     name: "booflix",
     props: {
-        production: Object,
+        id: Number,
+        title: String,
+        originalTitle: String,
+        voteAverage: Number,
+        lang: String,
+        posterPath: String || null
     },
     computed: {
         hasFlag() {
             const flags = ["it", "en"];
-            return flags.includes(this.production.original_language)
+            return flags.includes(this.lang)
         },
         flagSearch() {
-            const url = new URL(`../assets/img/${this.production.original_language}.png`, import.meta.url);
+            const url = new URL(`../assets/img/${this.lang}.png`, import.meta.url);
             return url.href
+        },
+        posterSearch() {
+            return this.posterPath ? pics.baseUri + this.posterPath : pics.placeholder;
+        },
+        vote() {
+            return Math.ceil(this.voteAverage / 2);
         }
     }
 }
 </script>
 
 <template>
-    <li>{{ production.title || production.name }}</li>
-    <li>{{ production.original_title || production.original_name }}</li>
+    <li>{{ title }}</li>
+    <li>{{ originalTitle }}</li>
+    <li><img :src="posterSearch" :alt="title"></li>
     <li>
-        <img v-if="hasFlag" :src="flagSearch" :alt="production.original_language">
-        <span v-else>{{ production.original_language }}</span>
+        <img v-if="hasFlag" :src="flagSearch" :alt="lang">
+        <span v-else>{{ lang }}</span>
     </li>
-    <li>{{ production.vote_average }}</li>
+    <li> <i v-for="n in 5" :key="n" class="fa-star" :class="n <= vote ? 'fas' : 'far'"></i></li>
 </template>

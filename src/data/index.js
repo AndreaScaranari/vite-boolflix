@@ -4,4 +4,18 @@ const api = {
     language: "it-It"
 }
 
-export { api }
+const pics = {
+    baseUri: "https://image.tmdb.org/t/p/w342",
+    placeholder: "https://www.altavod.com/assets/images/poster-placeholder.png"
+}
+
+const mapProductions = p => ({
+    id: p.id,
+    title: p.title || p.name,
+    originalTitle: p.original_title || p.original_name,
+    lang: p.original_language,
+    posterPath: p.poster_path,
+    voteAverage: p.vote_average
+})
+
+export { api, mapProductions, pics }

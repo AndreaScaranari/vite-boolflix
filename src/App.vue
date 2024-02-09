@@ -1,6 +1,6 @@
 <script>
 import axios from "axios";
-import { api } from "./data/index.js";
+import { api, mapProductions } from "./data/index.js";
 import { store } from "./data/store.js";
 import SearchForm from "./components/SearchForm.vue";
 import ProductionCard from "./components/ProductionCard.vue"
@@ -35,7 +35,7 @@ export default {
             }
             axios.get(`${baseUri}/${endpoint}`, { params })
                 .then((res) => {
-                    store[collection] = res.data.results;
+                    store[collection] = res.data.results.map(mapProductions);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -46,17 +46,19 @@ export default {
 </script>
 
 <template>
-    <SearchForm @form-submit="searchProductions" @term-change="setTitleFilter" buttonLabel="Cerca"
-        placeHolder="Cosa vorresti vedere?" />
+    <header>
+        <SearchForm @form-submit="searchProductions" @term-change="setTitleFilter" buttonLabel="Cerca"
+            placeHolder="Cosa vorresti vedere?" />
+    </header>
 
     <main>
         <section>
             <h2>Movies</h2>
-            <ProductionCard v-for="movie in store.movies" :key="movie.id" :production="movie" />
+            <ProductionCard v-for="movie in store.movies" :key="movie.id" v-bind="movie" />
         </section>
         <section>
             <h2>Series</h2>
-            <ProductionCard v-for="series in store.series" :key="series.id" :production="series" />
+            <ProductionCard v-for="series in store.series" :key="series.id" v-bind="series" />
         </section>
     </main>
 </template>
