@@ -1,5 +1,5 @@
 import { reactive } from "vue";
 
-const store = reactive({ movies: [], titleFilter: "" });
+const store = reactive({ movies: [], series: [], titleFilter: "" });
 
 export { store };

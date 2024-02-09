@@ -3,23 +3,29 @@ import axios from "axios";
 import { api } from "./data/index.js";
 import { store } from "./data/store.js";
 import SearchForm from "./components/SearchForm.vue";
+import ProductionCard from "./components/ProductionCard.vue"
 
 export default {
     name: "booflix",
     data: () => ({
         store,
     }),
-    components: { SearchForm },
+    components: { SearchForm, ProductionCard },
     methods: {
         setTitleFilter(term) {
             store.titleFilter = term;
         },
-        searchMovies() {
+        searchProductions() {
             if (!store.titleFilter) {
                 store.movies = [];
+                store.series = [];
                 return;
             }
 
+            this.fetchApi("search/movie", "movies");
+            this.fetchApi("search/tv", "series");
+        },
+        fetchApi(endpoint, collection) {
             const { baseUri, language, apiKey } = api;
 
             const params = {
@@ -27,32 +33,30 @@ export default {
                 api_key: apiKey,
                 language
             }
-
-            axios.get(`${baseUri}/search/movie`, { params })
+            axios.get(`${baseUri}/${endpoint}`, { params })
                 .then((res) => {
-                    store.movies = res.data.results;
+                    store[collection] = res.data.results;
                 })
                 .catch((err) => {
                     console.log(err);
                 })
         }
-    },
+    }
 };
 </script>
 
 <template>
-    <SearchForm @form-submit="searchMovies" @term-change="setTitleFilter" buttonLabel="Cerca"
+    <SearchForm @form-submit="searchProductions" @term-change="setTitleFilter" buttonLabel="Cerca"
         placeHolder="Cosa vorresti vedere?" />
 
     <main>
         <section>
-            <h2>movies</h2>
-            <ul v-for="movie in store.movies" :key="movie.id">
-                <li>{{ movie.title }}</li>
-                <li>{{ movie.original_title }}</li>
-                <li>{{ movie.original_language }}</li>
-                <li>{{ movie.vote_average }}</li>
-            </ul>
+            <h2>Movies</h2>
+            <ProductionCard v-for="movie in store.movies" :key="movie.id" :production="movie" />
+        </section>
+        <section>
+            <h2>Series</h2>
+            <ProductionCard v-for="series in store.series" :key="series.id" :production="series" />
         </section>
     </main>
 </template>
